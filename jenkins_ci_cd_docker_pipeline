@@ -1,7 +1,7 @@
 node{
      
     stage('SCM Checkout'){
-        git url: 'https://github.com/devopstrainingbanglore/gradle-web-app.git',branch: 'master'
+        git url: 'https://github.com/srashtaa-tech/gradle-web-app.git',branch: 'master'
     }
     
     stage("Gradle Clean Build"){
@@ -24,7 +24,7 @@ node{
     
     stage('Push Docker Image'){
         withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
-          sh "docker login -u dockerhandson -p ${Docker_Hub_Pwd}"
+          sh "docker login -u thouhid -p ${Docker_Hub_Pwd}"
         }
         sh 'docker push dockerhandson/gradle-web-app'
      }
@@ -34,10 +34,10 @@ node{
         def dockerRun = ' docker run  -d -p 8080:8080 --name gradle-web-app dockerhandson/gradle-web-app'
          
          sshagent(['DOCKER_SERVER']) {
-          sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.20.72 docker stop gradle-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rm gradle-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rmi -f  $(docker images -q) || true'
-          sh "ssh  ubuntu@172.31.20.72 ${dockerRun}"
+          sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.19.248 docker stop gradle-web-app || true'
+          sh 'ssh  ubuntu@172.31.19.248 docker rm gradle-web-app || true'
+          sh 'ssh  ubuntu@172.31.19.248 docker rmi -f  $(docker images -q) || true'
+          sh "ssh  ubuntu@172.31.19.248 ${dockerRun}"
        }
        
     }
